@@ -5,6 +5,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import com.nextinno.unittest.bytecheck.ByteCheckUnit;
 import com.nextinno.unittest.enums.EnumUnit;
 import com.nextinno.unittest.thread.RunnableUnit;
 import com.nextinno.unittest.thread.ThreadUnit;
@@ -17,6 +18,8 @@ public class UnittestApplication implements CommandLineRunner {
     private RunnableUnit runnableUnit;
     @Autowired
     private EnumUnit enumUnit;
+    @Autowired
+    private ByteCheckUnit byteCheckUnit;
 
     public static void main(String[] args) {
         SpringApplication.run(UnittestApplication.class, args);
@@ -24,8 +27,17 @@ public class UnittestApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        unit_Thread();
-        unit_enum();
+        // unit_Thread();
+        // unit_enum();
+        unit_byteCheck();
+    }
+
+    private void unit_byteCheck() {
+        byteCheckUnit.excuteByteCheckUnit();
+    }
+
+    private void unit_enum() {
+        enumUnit.excuteEnum();
     }
 
     private void unit_Thread() {
@@ -36,9 +48,4 @@ public class UnittestApplication implements CommandLineRunner {
         Thread thread = new Thread(runnableUnit);
         thread.start();
     }
-
-    private void unit_enum() {
-        enumUnit.excuteEnum();
-    }
-
 }
