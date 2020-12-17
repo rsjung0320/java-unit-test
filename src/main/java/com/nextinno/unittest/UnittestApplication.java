@@ -5,6 +5,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import com.nextinno.unittest.aes256.Aes256Unit;
 import com.nextinno.unittest.bytecheck.ByteCheckUnit;
 import com.nextinno.unittest.enums.EnumUnit;
 import com.nextinno.unittest.thread.RunnableUnit;
@@ -20,6 +21,8 @@ public class UnittestApplication implements CommandLineRunner {
     private EnumUnit enumUnit;
     @Autowired
     private ByteCheckUnit byteCheckUnit;
+    @Autowired
+    private Aes256Unit aes256Unit;
 
     public static void main(String[] args) {
         SpringApplication.run(UnittestApplication.class, args);
@@ -29,7 +32,13 @@ public class UnittestApplication implements CommandLineRunner {
     public void run(String... args) throws Exception {
         // unit_Thread();
         // unit_enum();
-        unit_byteCheck();
+        // unit_byteCheck();
+        unit_Aes235();
+    }
+
+    private void unit_Aes235() {
+        String cipherText = aes256Unit.encryptAES("test", "f3c5d432705191627778e4683d87dfed");
+        System.out.println(cipherText);
     }
 
     private void unit_byteCheck() {
@@ -48,4 +57,5 @@ public class UnittestApplication implements CommandLineRunner {
         Thread thread = new Thread(runnableUnit);
         thread.start();
     }
+
 }
