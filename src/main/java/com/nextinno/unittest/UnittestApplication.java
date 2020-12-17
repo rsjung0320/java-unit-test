@@ -8,6 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import com.nextinno.unittest.aes256.Aes256Unit;
 import com.nextinno.unittest.bytecheck.ByteCheckUnit;
 import com.nextinno.unittest.enums.EnumUnit;
+import com.nextinno.unittest.splitcheck.SplitCheckUnit;
 import com.nextinno.unittest.thread.RunnableUnit;
 import com.nextinno.unittest.thread.ThreadUnit;
 
@@ -23,6 +24,8 @@ public class UnittestApplication implements CommandLineRunner {
     private ByteCheckUnit byteCheckUnit;
     @Autowired
     private Aes256Unit aes256Unit;
+    @Autowired
+    private SplitCheckUnit splitCheckUnit;
 
     public static void main(String[] args) {
         SpringApplication.run(UnittestApplication.class, args);
@@ -30,10 +33,24 @@ public class UnittestApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+        unit_splitcheck();
         // unit_Thread();
         // unit_enum();
         // unit_byteCheck();
-        unit_Aes256();
+        // unit_Aes256();
+    }
+
+    private void unit_splitcheck() {
+        splitCheckUnit.excuteSplitCheck();
+    }
+
+    private void unit_Thread() {
+        threadUnit.start();
+        System.out.println("This code is outside of the thread");
+
+        // Runnable 은 아래와 같이 구동해야 함
+        Thread thread = new Thread(runnableUnit);
+        thread.start();
     }
 
     private void unit_Aes256() {
@@ -49,15 +66,6 @@ public class UnittestApplication implements CommandLineRunner {
 
     private void unit_enum() {
         enumUnit.excuteEnum();
-    }
-
-    private void unit_Thread() {
-        threadUnit.start();
-        System.out.println("This code is outside of the thread");
-
-        // Runnable 은 아래와 같이 구동해야 함
-        Thread thread = new Thread(runnableUnit);
-        thread.start();
     }
 
 }
