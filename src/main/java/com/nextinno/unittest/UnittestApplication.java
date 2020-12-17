@@ -33,12 +33,14 @@ public class UnittestApplication implements CommandLineRunner {
         // unit_Thread();
         // unit_enum();
         // unit_byteCheck();
-        unit_Aes235();
+        unit_Aes256();
     }
 
-    private void unit_Aes235() {
-        String cipherText = aes256Unit.encryptAES("test", "f3c5d432705191627778e4683d87dfed");
+    private void unit_Aes256() {
+        String cipherText = aes256Unit.encryptAES256("test", "f3c5d432705191627778e4683d87dfed");
         System.out.println(cipherText);
+        String Text = aes256Unit.decryptAES256(cipherText, "f3c5d432705191627778e4683d87dfed");
+        System.out.println(Text);
     }
 
     private void unit_byteCheck() {
