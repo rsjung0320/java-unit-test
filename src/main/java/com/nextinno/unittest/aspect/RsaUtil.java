@@ -15,14 +15,38 @@ import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
+import org.springframework.stereotype.Component;
+
 import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author rsjung 2020. 11. 20.
  */
+@Component
 @Slf4j
 public class RsaUtil {
     private final String RSA = "RSA";
+
+    /**
+     * Public Key로 RAS 암호화를 수행합니다.
+     * 
+     * @param plainText 암호화 할 평문 입니다.
+     * @param publicKey
+     * @return
+     */
+    public String encryptRSA(String plainText, PublicKey publicKey) {
+        Cipher cipher;
+        try {
+            cipher = Cipher.getInstance(RSA);
+            cipher.init(Cipher.ENCRYPT_MODE, publicKey);
+            byte[] bytePlain = cipher.doFinal(plainText.getBytes());
+            return Base64.getEncoder().encodeToString(bytePlain);
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException
+                | BadPaddingException e) {
+            log.error("encryptRSA Exception :", e);
+            return null;
+        }
+    }
 
     /**
      * Private Key로 RAS 복호화를 수행합니다.
@@ -32,28 +56,32 @@ public class RsaUtil {
      * @return
      * @throws Exception
      */
-    public String decryptRSA(String encrypted, PrivateKey privateKey)
-            throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, BadPaddingException,
-            IllegalBlockSizeException, UnsupportedEncodingException {
-        Cipher cipher = Cipher.getInstance(RSA);
-        byte[] byteEncrypted = Base64.getDecoder().decode(encrypted.getBytes());
-        cipher.init(Cipher.DECRYPT_MODE, privateKey);
-        byte[] bytePlain = cipher.doFinal(byteEncrypted);
-        String decrypted = new String(bytePlain, "utf-8");
-        return decrypted;
+    public String decryptRSA(String encrypted, PrivateKey privateKey) {
+        Cipher cipher;
+        try {
+            cipher = Cipher.getInstance(RSA);
+            byte[] byteEncrypted = Base64.getDecoder().decode(encrypted.getBytes());
+            cipher.init(Cipher.DECRYPT_MODE, privateKey);
+            byte[] bytePlain = cipher.doFinal(byteEncrypted);
+            return new String(bytePlain, "utf-8");
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | UnsupportedEncodingException
+                | IllegalBlockSizeException | BadPaddingException e) {
+            log.error("decryptRSA Exception :", e);
+            return null;
+        }
     }
 
     /**
-     * String으로 된 key를 PublicKey 로 반환하는 함수
+     * byte[]으로 된 key를 PublicKey 로 반환하는 함수
      * 
      * @param publicKeyStr
      * @return
      */
-    public PublicKey StringToPublicKey(String publicKeyStr) {
+    public PublicKey StringToPublicKey(byte[] publicKeyStr) {
         KeyFactory keyFactory = null;
         PublicKey publicKey = null;
         try {
-            X509EncodedKeySpec ukeySpec = new X509EncodedKeySpec(hexToByteArray(publicKeyStr));
+            X509EncodedKeySpec ukeySpec = new X509EncodedKeySpec(publicKeyStr);
             keyFactory = KeyFactory.getInstance(RSA);
             publicKey = keyFactory.generatePublic(ukeySpec);
         } catch (Exception e) {
@@ -64,18 +92,18 @@ public class RsaUtil {
     }
 
     /**
-     * String으로 된 key를 PrivateKey 로 반환하는 함수
+     * byte[]으로 된 key를 PrivateKey 로 반환하는 함수
      * 
      * @param privateKeyStr
      * @return
      */
-    public PrivateKey StringToPrivateKey(String privateKeyStr) {
+    public PrivateKey StringToPrivateKey(byte[] privateKeyStr) {
         PrivateKey privateKey = null;
+        KeyFactory keyFactory = null;
         try {
-            PKCS8EncodedKeySpec rkeySpec = new PKCS8EncodedKeySpec(hexToByteArray(privateKeyStr));
-            KeyFactory rkeyFactory = KeyFactory.getInstance(RSA);
-
-            privateKey = rkeyFactory.generatePrivate(rkeySpec);
+            PKCS8EncodedKeySpec rkeySpec = new PKCS8EncodedKeySpec(privateKeyStr);
+            keyFactory = KeyFactory.getInstance(RSA);
+            privateKey = keyFactory.generatePrivate(rkeySpec);
         } catch (Exception e) {
             log.error("StringToPrivateKey Exception : ", e);
         }

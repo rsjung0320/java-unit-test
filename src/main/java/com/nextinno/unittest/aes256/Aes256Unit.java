@@ -1,8 +1,11 @@
 package com.nextinno.unittest.aes256;
 
+import java.security.SecureRandom;
+import java.util.Arrays;
 import java.util.Base64;
 
 import javax.crypto.Cipher;
+import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 import org.springframework.stereotype.Component;
@@ -70,5 +73,65 @@ public class Aes256Unit {
             System.out.println(e);
             return null;
         }
+    }
+
+    public String encryptAes256Cbc(String msg, String secretKey) {
+        try {
+            byte[] secretKeyBytes = secretKey.getBytes();
+
+            if (secretKeyBytes.length != 32) {
+                System.out.println("The AES-256 key must be 32 bytes.");
+                return null;
+            }
+
+            SecretKeySpec skeySpec = new SecretKeySpec(secretKeyBytes, AES);
+
+            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
+            byte[] ivBytes = generateIv();
+            cipher.init(Cipher.ENCRYPT_MODE, skeySpec, new IvParameterSpec(ivBytes));
+
+            byte[] cipherTextBytes = cipher.doFinal(msg.getBytes());
+            byte[] result = new byte[ivBytes.length + cipherTextBytes.length];
+
+            System.arraycopy(ivBytes, 0, result, 0, ivBytes.length);
+            System.arraycopy(cipherTextBytes, 0, result, ivBytes.length, cipherTextBytes.length);
+
+            return new String(Base64.getEncoder().encode(result), "utf-8");
+        } catch (Exception e) {
+            System.out.println(e);
+            return null;
+        }
+    }
+
+    public String decryptAes256Cbc(String cipherText, String secretKey) {
+        try {
+            byte[] secretKeyBytes = secretKey.getBytes();
+
+            if (secretKeyBytes.length != 32) {
+                System.out.println("The AES-256 key must be 32 bytes.");
+                return null;
+            }
+
+            SecretKeySpec skeySpec = new SecretKeySpec(secretKeyBytes, AES);
+
+            byte[] decodedCipherText = Base64.getDecoder().decode(cipherText);
+
+            byte[] ivBytes = Arrays.copyOfRange(decodedCipherText, 0, 16);
+            byte[] cipherTextBytes = Arrays.copyOfRange(decodedCipherText, 16, decodedCipherText.length);
+
+            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
+            cipher.init(Cipher.DECRYPT_MODE, skeySpec, new IvParameterSpec(ivBytes));
+
+            return new String(cipher.doFinal(cipherTextBytes), "utf-8");
+        } catch (Exception e) {
+            System.out.println(e);
+            return null;
+        }
+    }
+
+    public byte[] generateIv() {
+        byte[] iv = new byte[16];
+        new SecureRandom().nextBytes(iv);
+        return iv;
     }
 }
