@@ -77,11 +77,13 @@ public class RsaUtil {
      * @param publicKeyStr
      * @return
      */
-    public PublicKey StringToPublicKey(byte[] publicKeyStr) {
+    public PublicKey StringToPublicKey(String publicKeyStr) {
+        byte[] publicKeyBytes = Base64.getDecoder().decode(publicKeyStr.getBytes());
+
         KeyFactory keyFactory = null;
         PublicKey publicKey = null;
         try {
-            X509EncodedKeySpec ukeySpec = new X509EncodedKeySpec(publicKeyStr);
+            X509EncodedKeySpec ukeySpec = new X509EncodedKeySpec(publicKeyBytes);
             keyFactory = KeyFactory.getInstance(RSA);
             publicKey = keyFactory.generatePublic(ukeySpec);
         } catch (Exception e) {
@@ -97,11 +99,13 @@ public class RsaUtil {
      * @param privateKeyStr
      * @return
      */
-    public PrivateKey StringToPrivateKey(byte[] privateKeyStr) {
+    public PrivateKey StringToPrivateKey(String privateKeyStr) {
+        byte[] privateKeyBytes = Base64.getDecoder().decode(privateKeyStr.getBytes());
+
         PrivateKey privateKey = null;
         KeyFactory keyFactory = null;
         try {
-            PKCS8EncodedKeySpec rkeySpec = new PKCS8EncodedKeySpec(privateKeyStr);
+            PKCS8EncodedKeySpec rkeySpec = new PKCS8EncodedKeySpec(privateKeyBytes);
             keyFactory = KeyFactory.getInstance(RSA);
             privateKey = keyFactory.generatePrivate(rkeySpec);
         } catch (Exception e) {
