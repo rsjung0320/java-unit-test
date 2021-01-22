@@ -780,29 +780,29 @@ public class DateUtil {
         // 주간은 별도로 생성한다
         if (dateType == 4) {
             for (int j = 0; j < 7; j++) {
+                // hMap = new LinkedHashMap<String, String>();
+                // colName = "";
+                // 시간 값 삽입
+                // hMap.put("cTime", Integer.toString(j));
+                //
+                // resultData.add(hMap);
+                pattern = "MM-dd";
+                calendarType = Calendar.DATE;
+                addTime = 1;
+
+                SimpleDateFormat formatter = new SimpleDateFormat(pattern);
+
                 hMap = new LinkedHashMap<String, String>();
                 colName = "";
+
+                String time = formatter.format(calendar.getTime());
+                calendarType = Calendar.DAY_OF_WEEK;
+                String dayOfWeek = getDayOfWeekString(calendar.get(calendarType));
                 // 시간 값 삽입
-                hMap.put("DisTime", Integer.toString(j));
-
-                // 컬럼 지정 및 '0'데이터 삽입
-                for (int i = 0; i < columnName.size(); i++) {
-                    colName = columnName.get(i).toString();
-
-                    if (colName.equals("AVG")) {
-
-                        /*
-                         * 평균 값인 경우에는 소수점 2자리로 지정한다. 현재는 사용률 통계에서만 사용하지만 추구 조건을 보강하여 다른 곳에서도 사용하자.
-                         */
-
-                        hMap.put(colName, "0.00");
-                    } else {
-
-                        hMap.put(colName, "0");
-                    }
-                }
-
+                hMap.put("cTime", dayOfWeek + "(" + time + ")");
                 resultData.add(hMap);
+                calendar.add(calendarType, addTime); // 30분 더한다
+
             }
         } else {
             switch (dateType) {
@@ -889,6 +889,34 @@ public class DateUtil {
         }
 
         return resultData;
+    }
+
+    private String getDayOfWeekString(int type) {
+        String result = "";
+        switch (type) {
+            case 1:
+                result = "SUN";
+                break;
+            case 2:
+                result = "MON";
+                break;
+            case 3:
+                result = "TUE";
+                break;
+            case 4:
+                result = "WED";
+                break;
+            case 5:
+                result = "THU";
+                break;
+            case 6:
+                result = "FRI";
+                break;
+            case 7:
+                result = "SAT";
+                break;
+        }
+        return result;
     }
 
     /**

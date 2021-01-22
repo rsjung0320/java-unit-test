@@ -66,30 +66,37 @@ public class UnittestApplication implements CommandLineRunner {
         strArray.add("resInteract");
         strArray.add("resFull");
 
-        ArrayList<LinkedHashMap<String, String>> fakeData_1min =
-                dateUtil.getGanerateDateAndData("2020-02-01 00:00:00", "2020-02-01 01:59:59", 7, strArray);
-        ArrayList<LinkedHashMap<String, String>> fakeData_5min =
-                dateUtil.getGanerateDateAndData("2020-02-01 00:00:00", "2020-02-01 01:59:59", 0, strArray);
-        ArrayList<LinkedHashMap<String, String>> fakeData_15min =
-                dateUtil.getGanerateDateAndData("2020-02-01 00:00:00", "2020-02-01 02:59:59", 5, strArray);
-        ArrayList<LinkedHashMap<String, String>> fakeData_30min =
-                dateUtil.getGanerateDateAndData("2020-02-01 00:00:00", "2020-02-01 05:59:59", 6, strArray);
-        ArrayList<LinkedHashMap<String, String>> fakeData_1hour =
-                dateUtil.getGanerateDateAndData("2020-02-01 00:00:00", "2020-02-01 12:59:59", 1, strArray);
-        ArrayList<LinkedHashMap<String, String>> fakeData_day =
-                dateUtil.getGanerateDateAndData("2020-02-01 00:00:00", "2020-02-07 23:59:59", 2, strArray);
+        // ArrayList<LinkedHashMap<String, String>> fakeData_1min =
+        // dateUtil.getGanerateDateAndData("2020-02-01 00:00:00", "2020-02-01 01:59:59", 7,
+        // strArray);
+        // ArrayList<LinkedHashMap<String, String>> fakeData_5min =
+        // dateUtil.getGanerateDateAndData("2020-02-01 00:00:00", "2020-02-01 01:59:59", 0,
+        // strArray);
+        // ArrayList<LinkedHashMap<String, String>> fakeData_15min =
+        // dateUtil.getGanerateDateAndData("2020-02-01 00:00:00", "2020-02-01 02:59:59", 5,
+        // strArray);
+        // ArrayList<LinkedHashMap<String, String>> fakeData_30min =
+        // dateUtil.getGanerateDateAndData("2020-02-01 00:00:00", "2020-02-01 05:59:59", 6,
+        // strArray);
+        // ArrayList<LinkedHashMap<String, String>> fakeData_1hour =
+        // dateUtil.getGanerateDateAndData("2020-02-01 00:00:00", "2020-02-01 12:59:59", 1,
+        // strArray);
+        // ArrayList<LinkedHashMap<String, String>> fakeData_day =
+        // dateUtil.getGanerateDateAndData("2020-02-01 00:00:00", "2020-02-07 23:59:59", 2,
+        // strArray);
         ArrayList<LinkedHashMap<String, String>> fakeData_week =
-                dateUtil.getGanerateDateAndData("2020-02-01 00:00:00", "2020-02-07 23:59:59", 4, strArray);
-        ArrayList<LinkedHashMap<String, String>> fakeData_month =
-                dateUtil.getGanerateDateAndData("2020-01-01 00:00:00", "2020-12-31 23:59:59", 3, strArray);
-        System.out.println("fakeData_1min :" + fakeData_1min.toString());
-        System.out.println("fakeData_5min :" + fakeData_5min.toString());
-        System.out.println("fakeData_15min :" + fakeData_15min.toString());
-        System.out.println("fakeData_30min :" + fakeData_30min.toString());
-        System.out.println("fakeData_1hour :" + fakeData_1hour.toString());
-        System.out.println("fakeData_day :" + fakeData_day.toString());
+                dateUtil.getGanerateDateAndData("2021-01-22 00:00:00", "2021-01-28 23:59:59", 4, strArray);
+        // ArrayList<LinkedHashMap<String, String>> fakeData_month =
+        // dateUtil.getGanerateDateAndData("2020-01-01 00:00:00", "2020-12-31 23:59:59", 3,
+        // strArray);
+        // System.out.println("fakeData_1min :" + fakeData_1min.toString());
+        // System.out.println("fakeData_5min :" + fakeData_5min.toString());
+        // System.out.println("fakeData_15min :" + fakeData_15min.toString());
+        // System.out.println("fakeData_30min :" + fakeData_30min.toString());
+        // System.out.println("fakeData_1hour :" + fakeData_1hour.toString());
+        // System.out.println("fakeData_day :" + fakeData_day.toString());
         System.out.println("fakeData_week :" + fakeData_week.toString());
-        System.out.println("fakeData_month :" + fakeData_month.toString());
+        // System.out.println("fakeData_month :" + fakeData_month.toString());
         /*
          * 0 = DATE_FORMAT( DTIME, '%Y-%m-%d %H:%i' ) 2021-01-21 21:47 1 = DATE_FORMAT( DATE_SUB(
          * DTIME, INTERVAL MINUTE( DTIME ) MOD 5 MINUTE ), '%Y-%m-%d %H:%i' ) AS cTime 2021-01-21
