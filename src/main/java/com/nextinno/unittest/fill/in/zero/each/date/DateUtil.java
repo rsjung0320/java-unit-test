@@ -11,8 +11,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.LinkedHashMap;
 
-import com.nablecomm.nems.common.service.LocaleService;
-import com.nablecomm.nems.common.service.LocaleServiceImpl;
+import org.springframework.stereotype.Component;
 
 /**
  * <b>기능</b> :
@@ -23,6 +22,7 @@ import com.nablecomm.nems.common.service.LocaleServiceImpl;
  * @since 1.0
  * @see java.util.Date
  */
+@Component
 public class DateUtil {
 
     public static final int YEAR = 1;
@@ -44,7 +44,7 @@ public class DateUtil {
      * String date = DateUtil.getYyyymmdd()
      *         </pre>
      */
-    public static String getYyyymmdd(Calendar cal) {
+    public String getYyyymmdd(Calendar cal) {
         String pattern = "yyyyMMdd";
         SimpleDateFormat formatter = new SimpleDateFormat(pattern);
         return formatter.format(cal.getTime());
@@ -65,7 +65,7 @@ public class DateUtil {
      * Calendar cal = DateUtil.getGregorianCalendar(DateUtil.getCurrentYyyymmdd())
      *      </pre>
      */
-    public static GregorianCalendar getGregorianCalendar(String yyyymmdd) {
+    public GregorianCalendar getGregorianCalendar(String yyyymmdd) {
 
         int yyyy = Integer.parseInt(yyyymmdd.substring(0, 4));
         int mm = Integer.parseInt(yyyymmdd.substring(4, 6));
@@ -285,7 +285,7 @@ public class DateUtil {
      * String date = DateUtil.getOpDate(java.util.Calendar.DATE , 1, "20080101")
      *      </pre>
      */
-    public static String getOpDate(int field, int amount, String date) {
+    public String getOpDate(int field, int amount, String date) {
 
         GregorianCalendar calDate = getGregorianCalendar(date);
 
@@ -451,7 +451,7 @@ public class DateUtil {
      * int date = DateUtil.getLastDayOfMon(2008 , 1)
      *      </pre>
      */
-    public static int getLastDayOfMon(int year, int month) {
+    public int getLastDayOfMon(int year, int month) {
 
         Calendar cal = Calendar.getInstance();
         cal.set(year, month, 1);
@@ -473,7 +473,7 @@ public class DateUtil {
      * int date = DateUtil.getLastDayOfMon("2008")
      *         </pre>
      */
-    public static int getLastDayOfMon(String yyyymm) {
+    public int getLastDayOfMon(String yyyymm) {
 
         Calendar cal = Calendar.getInstance();
         int yyyy = Integer.parseInt(yyyymm.substring(0, 4));
@@ -496,7 +496,7 @@ public class DateUtil {
      * boolean b = DateUtil.isCorrect("20080101")
      *         </pre>
      */
-    public static boolean isCorrect(String yyyymmdd) {
+    public boolean isCorrect(String yyyymmdd) {
         boolean flag = false;
         if (yyyymmdd.length() < 8)
             return false;
@@ -504,7 +504,7 @@ public class DateUtil {
             int yyyy = Integer.parseInt(yyyymmdd.substring(0, 4));
             int mm = Integer.parseInt(yyyymmdd.substring(4, 6));
             int dd = Integer.parseInt(yyyymmdd.substring(6));
-            flag = DateUtil.isCorrect(yyyy, mm, dd);
+            flag = isCorrect(yyyy, mm, dd);
         } catch (Exception ex) {
             return false;
         }
@@ -526,7 +526,7 @@ public class DateUtil {
      * boolean b = DateUtil.isCorrect(2008,1,1)
      *         </pre>
      */
-    public static boolean isCorrect(int yyyy, int mm, int dd) {
+    public boolean isCorrect(int yyyy, int mm, int dd) {
         if (yyyy < 0 || mm < 0 || dd < 0)
             return false;
         if (mm > 12 || dd > 31)
@@ -535,7 +535,7 @@ public class DateUtil {
         String year = "" + yyyy;
         String month = "00" + mm;
         String year_str = year + month.substring(month.length() - 2);
-        int endday = DateUtil.getLastDayOfMon(year_str);
+        int endday = getLastDayOfMon(year_str);
 
         if (dd > endday)
             return false;
@@ -604,21 +604,22 @@ public class DateUtil {
      * String date = DateUtil.changeDateFormat("20080101")
      *         </pre>
      */
-    public static String changeDateFormat(String yyyymmdd) {
-        String rtnDate = null;
-
-        String yyyy = yyyymmdd.substring(0, 4);
-        String mm = yyyymmdd.substring(4, 6);
-        String dd = yyyymmdd.substring(6, 8);
-
-        LocaleService locale = new LocaleServiceImpl();
-        // rtnDate=yyyy+" 년 "+mm + " 월 "+dd + " 일";
-        rtnDate = yyyy + " " + locale.translate("SBC.STATS.YEAR") + " " + mm + " " + locale.translate("SBC.STATS.MONTH")
-                + " " + dd + " " + locale.translate("COMMON.DAY");
-
-        return rtnDate;
-
-    }
+    // public String changeDateFormat(String yyyymmdd) {
+    // String rtnDate = null;
+    //
+    // String yyyy = yyyymmdd.substring(0, 4);
+    // String mm = yyyymmdd.substring(4, 6);
+    // String dd = yyyymmdd.substring(6, 8);
+    //
+    // LocaleService locale = new LocaleServiceImpl();
+    // // rtnDate=yyyy+" 년 "+mm + " 월 "+dd + " 일";
+    // rtnDate = yyyy + " " + locale.translate("SBC.STATS.YEAR") + " " + mm + " " +
+    // locale.translate("SBC.STATS.MONTH")
+    // + " " + dd + " " + locale.translate("COMMON.DAY");
+    //
+    // return rtnDate;
+    //
+    // }
 
     /**
      * <p>
@@ -635,7 +636,7 @@ public class DateUtil {
      * long date = DateUtil.getDifferDays("20080101","20080202")
      *      </pre>
      */
-    public static long getDifferDays(String startDate, String endDate) {
+    public long getDifferDays(String startDate, String endDate) {
 
         GregorianCalendar StartDate = getGregorianCalendar(startDate);
         GregorianCalendar EndDate = getGregorianCalendar(endDate);
@@ -664,7 +665,7 @@ public class DateUtil {
      *  FRIDAY    = 6
      *      </pre>
      */
-    public static int getDayOfWeek() {
+    public int getDayOfWeek() {
         Calendar rightNow = Calendar.getInstance();
         int day_of_week = rightNow.get(Calendar.DAY_OF_WEEK);
         return day_of_week;
@@ -684,7 +685,7 @@ public class DateUtil {
      * int day = DateUtil.getWeekOfYear()
      *      </pre>
      */
-    public static int getWeekOfYear() {
+    public int getWeekOfYear() {
         Calendar rightNow = Calendar.getInstance();
         int week_of_year = rightNow.get(Calendar.WEEK_OF_YEAR);
         return week_of_year;
@@ -704,7 +705,7 @@ public class DateUtil {
      * int day = DateUtil.getWeekOfMonth()
      *      </pre>
      */
-    public static int getWeekOfMonth() {
+    public int getWeekOfMonth() {
         Calendar rightNow = Calendar.getInstance();
         int week_of_month = rightNow.get(Calendar.WEEK_OF_MONTH);
         return week_of_month;
@@ -724,7 +725,7 @@ public class DateUtil {
      * Calendar cal = DateUtil.getCalendarInstance(DateUtil.getCurrentYyyymmdd())
      *      </pre>
      */
-    public static Calendar getCalendarInstance(String p_date) {
+    public Calendar getCalendarInstance(String p_date) {
         Calendar retCal = Calendar.getInstance();
 
         if (p_date != null && p_date.length() == 8) {
@@ -746,7 +747,7 @@ public class DateUtil {
      * @param columnName : 각 통계에서 필요한 열 이름
      * @return resultData : 해당 기간 동안의 '0' 데이터
      */
-    public static ArrayList<LinkedHashMap<String, String>> getGanerateDateAndData(String startDate, String endDate,
+    public ArrayList<LinkedHashMap<String, String>> getGanerateDateAndData(String startDate, String endDate,
             int dateType, ArrayList<String> columnName) {
         LinkedHashMap<String, String> hMap; // HashMap을 생성 후 ArrayList에 담는다
         String pattern = ""; // 날짜 형식 지정
@@ -899,7 +900,7 @@ public class DateUtil {
      * @param columnName : 각 통계에서 필요한 열 이름
      * @return resultData : 해당 기간 동안의 '0' 데이터
      */
-    public static ArrayList<LinkedHashMap<String, String>> getRealmGanerateDateAndData(String startDate, String endDate,
+    public ArrayList<LinkedHashMap<String, String>> getRealmGanerateDateAndData(String startDate, String endDate,
             int dateType, ArrayList<String> columnName, ArrayList<String> realmName) {
         LinkedHashMap<String, String> hMap; // HashMap을 생성 후 ArrayList에 담는다
         String pattern = ""; // 날짜 형식 지정
@@ -1045,7 +1046,7 @@ public class DateUtil {
      * @param period : 기간값. ex) 0: 5분, 5: 15분, 6: 30분, 1: 1시간
      * @return ex) 5분간 : '00:00 ~ 0005', 시간 : '09-01 00:00 ~ 01:00'
      */
-    public static String timeConversion(String val, String period) {
+    public String timeConversion(String val, String period) {
         String retData = "";
         String hour = "";
         String min = "";

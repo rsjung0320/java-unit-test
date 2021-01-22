@@ -2,6 +2,8 @@ package com.nextinno.unittest;
 
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -56,8 +58,56 @@ public class UnittestApplication implements CommandLineRunner {
     }
 
     private void unit_fill() {
+        ArrayList<String> strArray = new ArrayList<String>();
+        // { cTime: '2021-01-12 04:00', req: '0', resSuccess: '1', resInteract: '0', resFull: '0' }
+        strArray.add("cTime");
+        strArray.add("req");
+        strArray.add("resSuccess");
+        strArray.add("resInteract");
+        strArray.add("resFull");
 
-        fillInZeroEachDate.fillInZeroEachDate("2020-02-01 00:00:00", "2020-05-31 23:59:59", 0);
+        ArrayList<LinkedHashMap<String, String>> fakeData_1min =
+                dateUtil.getGanerateDateAndData("2020-02-01 00:00:00", "2020-02-01 01:59:59", 7, strArray);
+        ArrayList<LinkedHashMap<String, String>> fakeData_5min =
+                dateUtil.getGanerateDateAndData("2020-02-01 00:00:00", "2020-02-01 01:59:59", 0, strArray);
+        ArrayList<LinkedHashMap<String, String>> fakeData_15min =
+                dateUtil.getGanerateDateAndData("2020-02-01 00:00:00", "2020-02-01 02:59:59", 5, strArray);
+        ArrayList<LinkedHashMap<String, String>> fakeData_30min =
+                dateUtil.getGanerateDateAndData("2020-02-01 00:00:00", "2020-02-01 05:59:59", 6, strArray);
+        ArrayList<LinkedHashMap<String, String>> fakeData_1hour =
+                dateUtil.getGanerateDateAndData("2020-02-01 00:00:00", "2020-02-01 12:59:59", 1, strArray);
+        ArrayList<LinkedHashMap<String, String>> fakeData_day =
+                dateUtil.getGanerateDateAndData("2020-02-01 00:00:00", "2020-02-07 23:59:59", 2, strArray);
+        ArrayList<LinkedHashMap<String, String>> fakeData_week =
+                dateUtil.getGanerateDateAndData("2020-02-01 00:00:00", "2020-02-07 23:59:59", 4, strArray);
+        ArrayList<LinkedHashMap<String, String>> fakeData_month =
+                dateUtil.getGanerateDateAndData("2020-01-01 00:00:00", "2020-12-31 23:59:59", 3, strArray);
+        System.out.println("fakeData_1min :" + fakeData_1min.toString());
+        System.out.println("fakeData_5min :" + fakeData_5min.toString());
+        System.out.println("fakeData_15min :" + fakeData_15min.toString());
+        System.out.println("fakeData_30min :" + fakeData_30min.toString());
+        System.out.println("fakeData_1hour :" + fakeData_1hour.toString());
+        System.out.println("fakeData_day :" + fakeData_day.toString());
+        System.out.println("fakeData_week :" + fakeData_week.toString());
+        System.out.println("fakeData_month :" + fakeData_month.toString());
+        /*
+         * 0 = DATE_FORMAT( DTIME, '%Y-%m-%d %H:%i' ) 2021-01-21 21:47 1 = DATE_FORMAT( DATE_SUB(
+         * DTIME, INTERVAL MINUTE( DTIME ) MOD 5 MINUTE ), '%Y-%m-%d %H:%i' ) AS cTime 2021-01-21
+         * 21:45 2 = DATE_FORMAT( DATE_SUB( DTIME, INTERVAL MINUTE( DTIME ) MOD 15 MINUTE
+         * ),'%Y-%m-%d %H:%i' ) AS cTime 2021-01-21 21:45 3 = DATE_FORMAT( DATE_SUB( DTIME, INTERVAL
+         * MINUTE( DTIME ) MOD 30 MINUTE ),'%Y-%m-%d %H:%i' ) AS cTime 2021-01-21 21:30 4 =
+         * DATE_FORMAT( DTIME, '%Y-%m-%d %H:00' ) AS cTime 2021-01-21 21:00 5 = DATE_FORMAT( DTIME,
+         * '%Y-%m-%d' ) AS cTime 2021-01-21 6 = CASE WHEN DATE_FORMAT(DTIME, '%w') = 0 THEN CONCAT(
+         * 'SUN', ' (', DATE_FORMAT(DTIME, '%m-%d'), ')' ) WHEN DATE_FORMAT(DTIME, '%w') = 1 THEN
+         * CONCAT( 'MON', ' (', DATE_FORMAT(DTIME, '%m-%d'), ')' ) WHEN DATE_FORMAT(DTIME, '%w') = 2
+         * THEN CONCAT( 'TUE', ' (', DATE_FORMAT(DTIME, '%m-%d'), ')' ) WHEN DATE_FORMAT(DTIME,
+         * '%w') = 3 THEN CONCAT( 'WED', ' (', DATE_FORMAT(DTIME, '%m-%d'), ')' ) WHEN
+         * DATE_FORMAT(DTIME, '%w') = 4 THEN CONCAT( 'THU', ' (', DATE_FORMAT(DTIME, '%m-%d'), ')' )
+         * WHEN DATE_FORMAT(DTIME, '%w') = 5 THEN CONCAT( 'FRI', ' (', DATE_FORMAT(DTIME, '%m-%d'),
+         * ')' ) WHEN DATE_FORMAT(DTIME, '%w') = 6 THEN CONCAT( 'SAT', ' (', DATE_FORMAT(DTIME,
+         * '%m-%d'), ')' ) ELSE '-' END AS cTime THU (01-21) 7 = DATE_FORMAT( DTIME, '%Y-%m' ) AS
+         * cTime 2021-01
+         */
     }
 
     private void unit_rsa() {
