@@ -12,6 +12,8 @@ import com.nextinno.unittest.aes256.Aes256Unit;
 import com.nextinno.unittest.aspect.RsaUtil;
 import com.nextinno.unittest.bytecheck.ByteCheckUnit;
 import com.nextinno.unittest.enums.EnumUnit;
+import com.nextinno.unittest.fill.in.zero.each.date.DateUtil;
+import com.nextinno.unittest.fill.in.zero.each.date.FillInZeroEachDate;
 import com.nextinno.unittest.splitcheck.SplitCheckUnit;
 import com.nextinno.unittest.thread.RunnableUnit;
 import com.nextinno.unittest.thread.ThreadUnit;
@@ -32,6 +34,10 @@ public class UnittestApplication implements CommandLineRunner {
     private SplitCheckUnit splitCheckUnit;
     @Autowired
     private RsaUtil rsaUtil;
+    @Autowired
+    private FillInZeroEachDate fillInZeroEachDate;
+    @Autowired
+    private DateUtil dateUtil;
 
     public static void main(String[] args) {
         SpringApplication.run(UnittestApplication.class, args);
@@ -39,13 +45,19 @@ public class UnittestApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        unit_rsa();
+        unit_fill();
+        // unit_rsa();
         // unit_splitcheck();
         // unit_Thread();
         // unit_enum();
         // unit_byteCheck();
         // unit_Aes256();
         // unit_Aes256_CBC();
+    }
+
+    private void unit_fill() {
+
+        fillInZeroEachDate.fillInZeroEachDate("2020-02-01 00:00:00", "2020-05-31 23:59:59", 0);
     }
 
     private void unit_rsa() {
