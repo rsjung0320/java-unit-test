@@ -19,6 +19,8 @@ import com.nextinno.unittest.fill.in.zero.each.date.FillInZeroEachDate;
 import com.nextinno.unittest.splitcheck.SplitCheckUnit;
 import com.nextinno.unittest.thread.RunnableUnit;
 import com.nextinno.unittest.thread.ThreadUnit;
+import com.nextinno.unittest.trythrow.ServiceException;
+import com.nextinno.unittest.trythrow.ThrowUtil;
 
 @SpringBootApplication
 public class UnittestApplication implements CommandLineRunner {
@@ -40,6 +42,8 @@ public class UnittestApplication implements CommandLineRunner {
     private FillInZeroEachDate fillInZeroEachDate;
     @Autowired
     private DateUtil dateUtil;
+    @Autowired
+    private ThrowUtil throwUtil;
 
     public static void main(String[] args) {
         SpringApplication.run(UnittestApplication.class, args);
@@ -47,7 +51,10 @@ public class UnittestApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        unit_fill();
+        String result = unit_throw();
+        System.out.println(result);
+
+        // unit_fill();
         // unit_rsa();
         // unit_splitcheck();
         // unit_Thread();
@@ -55,6 +62,16 @@ public class UnittestApplication implements CommandLineRunner {
         // unit_byteCheck();
         // unit_Aes256();
         // unit_Aes256_CBC();
+    }
+
+    private String unit_throw() {
+        try {
+            return throwUtil.excuteThrow();
+        } catch (ServiceException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            return "";
+        }
     }
 
     private void unit_fill() {
